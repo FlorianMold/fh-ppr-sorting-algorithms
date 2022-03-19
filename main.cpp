@@ -66,7 +66,8 @@ int main(int argc, char *argv[]) {
             res = mergesort::parallelMergeSort(arrayToBeSorted);
             break;
         case 2:
-            res = mergesort::parallelThresholdMergeSort(arrayToBeSorted, threadNum, 5);
+            omp_set_num_threads(threadNum);
+            res = mergesort::parallelThresholdMergeSort(arrayToBeSorted, 5000);
             break;
         case 3:
             res = quicksort::sequentialQuickSort(arrayToBeSorted);
@@ -76,6 +77,7 @@ int main(int argc, char *argv[]) {
             res = quicksort::parallelQuickSort(arrayToBeSorted);
             break;
         case 5:
+            omp_set_num_threads(threadNum);
             res = quicksort::parallelThresholdQuickSort(arrayToBeSorted, threadNum, 5);
             break;
         default:

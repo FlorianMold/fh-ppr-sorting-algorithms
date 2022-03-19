@@ -11,7 +11,6 @@ namespace mergesort {
 
     std::vector<int> parallelThresholdMergeSort(
             std::vector<int> &array,
-            int threadAmount,
             int threshold
     );
 }

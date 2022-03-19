@@ -87,11 +87,39 @@ std::vector<int> mergesort::parallelMergeSort(vector<int> &array) {
     return array;
 }
 
+std::vector<int> parThreshMergeSort(vector<int> &array, int threshold) {
+    if (array.size() == 1) {
+        return array;
+    }
+
+    auto mid = array.begin() + (int) (array.size() / 2);
+
+    vector<int> left(array.begin(), mid);
+    vector<int> right(mid, array.end());
+
+    if (array.size() >= threshold) {
+#pragma omp task default(none) shared(left, threshold)
+        left = parThreshMergeSort(left, threshold);
+#pragma omp task default(none) shared(right, threshold)
+        right = parThreshMergeSort(right, threshold);
+    } else {
+        left = mergesort::sequentialMergeSort(left);
+        right = mergesort::sequentialMergeSort(right);
+    }
+
+#pragma omp taskwait
+    return merge(array, left, right);
+}
+
 std::vector<int> mergesort::parallelThresholdMergeSort(
         vector<int> &array,
-        int threadAmount,
         int threshold
 ) {
-//    cout << "do sort";
+#pragma omp parallel default(none) shared(array, threshold)
+    {
+#pragma omp single
+        parThreshMergeSort(array, threshold);
+    }
+
     return array;
 }
