@@ -36,15 +36,29 @@ std::vector<int> seqQuickSort(vector<int> &array, int low, int high) {
 std::vector<int> quicksort::sequentialQuickSort(vector<int> &array) {
     // https://gist.github.com/iwatakeshi/7f7a7c11cd7a6f76598df18a7ecda507
     // https://github.com/weiaicunzai/CPP_Practice/blob/master/sort/quick_sort.cpp
-    if (array.size() == 1) {
-        return array;
-    }
-
     return seqQuickSort(array, 0, (int) array.size() - 1);
 }
 
-std::vector<int> quicksort::parallelQuickSort(vector<int> &array, int threadAmount) {
-//    cout << "do sort";
+std::vector<int> parQuickSort(vector<int> &array, int low, int high) {
+    if (low >= high) return array;
+
+    int pivotElement = array[(low + high) / 2];
+    int pivotIndex = partition(array, low, high, pivotElement);
+
+#pragma omp task default(none) shared(array, low, pivotIndex)
+    seqQuickSort(array, low, pivotIndex - 1);
+#pragma omp task default(none) shared(array, high, pivotIndex)
+    seqQuickSort(array, pivotIndex, high);
+
+    return array;
+};
+
+std::vector<int> quicksort::parallelQuickSort(vector<int> &array) {
+#pragma omp parallel default(none) shared(array)
+    {
+#pragma omp single
+        parQuickSort(array, 0, (int) array.size() - 1);
+    }
     return array;
 }
 
