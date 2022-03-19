@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "MergeSort.h"
+#include <omp.h>
 
 using namespace std;
 
@@ -57,8 +58,33 @@ vector<int> mergesort::sequentialMergeSort(vector<int> &array) {
     return merge(array, left, right);
 }
 
-std::vector<int> mergesort::parallelMergeSort(vector<int> &array, int threadAmount) {
-    cout << "do sort";
+std::vector<int> parMergeSort(vector<int> &array) {
+    if (array.size() == 1) {
+        return array;
+    }
+
+    auto mid = array.begin() + (int) (array.size() / 2);
+
+    vector<int> left(array.begin(), mid);
+    vector<int> right(mid, array.end());
+
+#pragma omp task default(none) shared(left)
+    left = parMergeSort(left);
+#pragma omp task default(none) shared(right)
+    right = parMergeSort(right);
+
+#pragma omp taskwait
+    return merge(array, left, right);
+}
+
+std::vector<int> mergesort::parallelMergeSort(vector<int> &array) {
+#pragma omp parallel default(none) shared(array)
+    {
+#pragma omp single
+        parMergeSort(array);
+    }
+
+    return array;
 }
 
 std::vector<int> mergesort::parallelThresholdMergeSort(
@@ -66,5 +92,6 @@ std::vector<int> mergesort::parallelThresholdMergeSort(
         int threadAmount,
         int threshold
 ) {
-    cout << "do sort";
+//    cout << "do sort";
+    return array;
 }
