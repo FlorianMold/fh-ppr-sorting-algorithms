@@ -10,6 +10,7 @@ rm results/quicksort/threshold/*
 iterations=100
 randomNumberAmount=500
 threadAmount=8
+threshold=5000
 
 # MergeSort
 
@@ -25,7 +26,7 @@ done
 echo "Running threshold parallel mergesort"
 for j in $(seq 1 $threadAmount);
 do
-   ./make-test.sh -i $iterations -t ${j} -r $randomNumberAmount -e 2 -f results/mergesort/threshold/result-t${j}.txt
+   ./make-test.sh -i $iterations -t ${j} -r $randomNumberAmount -e 2 -h $threshold -f results/mergesort/threshold/result-t${j}.txt
 done
 
 # Quicksort

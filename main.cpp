@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
     int randomNumberAmount = 500;
     int execution = 0;
     int threadNum = NUM_THREADS;
+    int threshold = 500;
 
     if (argc > 3) {
         threadNum = atoi(argv[1]);
@@ -50,12 +51,15 @@ int main(int argc, char *argv[]) {
         execution = atoi(argv[3]);
     }
 
+    if (argc > 4) {
+        threshold = atoi(argv[4]);
+    }
+
     auto arrayToBeSorted = createRandomNumberArray(randomNumberAmount);
 //    vector<int> arrayToBeSorted{15, 45, 78, 62, 14, 1, 5};
     vector<int> res;
 
     double wtime = omp_get_wtime();
-//    omp_set_num_threads(threadNum);
 
     switch (execution) {
         case 0:
@@ -67,7 +71,7 @@ int main(int argc, char *argv[]) {
             break;
         case 2:
             omp_set_num_threads(threadNum);
-            res = mergesort::parallelThresholdMergeSort(arrayToBeSorted, 5000);
+            res = mergesort::parallelThresholdMergeSort(arrayToBeSorted, threshold);
             break;
         case 3:
             res = quicksort::sequentialQuickSort(arrayToBeSorted);
@@ -78,7 +82,7 @@ int main(int argc, char *argv[]) {
             break;
         case 5:
             omp_set_num_threads(threadNum);
-            res = quicksort::parallelThresholdQuickSort(arrayToBeSorted, 5000);
+            res = quicksort::parallelThresholdQuickSort(arrayToBeSorted, threshold);
             break;
         default:
             cout << "Please provide an execution value between 0 and 5." << endl;
