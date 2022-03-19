@@ -50,38 +50,41 @@ int main(int argc, char *argv[]) {
         execution = atoi(argv[3]);
     }
 
-    auto arrayToBeSorted = createRandomNumberArray(randomNumberAmount);
+//    auto arrayToBeSorted = createRandomNumberArray(randomNumberAmount);
+    vector<int> arrayToBeSorted{15, 45, 78, 62, 14, 1, 5};
+    vector<int> res;
 
     double wtime = omp_get_wtime();
 //    omp_set_num_threads(threadNum);
 
     switch (execution) {
         case 0:
-            mergesort::sequentialMergeSort(arrayToBeSorted);
+            res = mergesort::sequentialMergeSort(arrayToBeSorted);
             break;
         case 1:
-            mergesort::parallelMergeSort(arrayToBeSorted, threadNum);
+            res = mergesort::parallelMergeSort(arrayToBeSorted, threadNum);
             break;
         case 2:
-            mergesort::parallelThresholdMergeSort(arrayToBeSorted, threadNum, 5);
+            res = mergesort::parallelThresholdMergeSort(arrayToBeSorted, threadNum, 5);
             break;
         case 3:
-            quicksort::sequentialQuickSort(arrayToBeSorted);
+            res = quicksort::sequentialQuickSort(arrayToBeSorted);
             break;
         case 4:
-            quicksort::parallelQuickSort(arrayToBeSorted, threadNum);
+            res = quicksort::parallelQuickSort(arrayToBeSorted, threadNum);
             break;
         case 5:
-            quicksort::parallelThresholdQuickSort(arrayToBeSorted, threadNum, 5);
+            res = quicksort::parallelThresholdQuickSort(arrayToBeSorted, threadNum, 5);
             break;
         default:
+            cout << "Please provide an execution value between 0 and 5." << endl;
             break;
     }
 
     wtime = omp_get_wtime() - wtime;
     cout << wtime << endl;
 
-//    print(numbers);
+    print(res);
 //    mergesort::parallelMergeSort(numbers, 8);
 //    mergesort::parallelThresholdMergeSort(numbers, 8, 5);
 //

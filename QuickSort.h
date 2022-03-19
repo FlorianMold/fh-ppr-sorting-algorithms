@@ -5,12 +5,12 @@
 #include <vector>
 
 namespace quicksort {
-    void sequentialQuickSort(std::vector<int> array);
+    std::vector<int> sequentialQuickSort(std::vector<int> &array);
 
-    void parallelQuickSort(std::vector<int> array, int threadAmount);
+    std::vector<int> parallelQuickSort(std::vector<int> &array, int threadAmount);
 
-    void parallelThresholdQuickSort(
-            std::vector<int> array,
+    std::vector<int> parallelThresholdQuickSort(
+            std::vector<int> &array,
             int threadAmount,
             int threshold
     );

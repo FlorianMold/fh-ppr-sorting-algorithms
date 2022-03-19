@@ -2,23 +2,57 @@
 // Created by user on 3/18/22.
 //
 
-#include <iostream>
 #include "QuickSort.h"
 
 using namespace std;
 
-void quicksort::sequentialQuickSort(vector<int> array) {
-    cout << "do sort";
+int partition(vector<int> &array, int low, int high, int pivot) {
+    int leftStart = low, rightEnd = high;
+
+    while (leftStart <= rightEnd) {
+        while (array[leftStart] < pivot) leftStart++;
+        while (array[rightEnd] > pivot) rightEnd--;
+
+        if (leftStart <= rightEnd) {
+            std::swap(array[leftStart], array[rightEnd]);
+            leftStart++;
+            rightEnd--;
+        }
+    }
+    return leftStart;
 }
 
-void quicksort::parallelQuickSort(vector<int> array, int threadAmount) {
-    cout << "do sort";
+std::vector<int> seqQuickSort(vector<int> &array, int low, int high) {
+    if (low >= high) return array;
+
+    int pivotElement = array[(low + high) / 2];
+    int pivotIndex = partition(array, low, high, pivotElement);
+    seqQuickSort(array, low, pivotIndex - 1);
+    seqQuickSort(array, pivotIndex, high);
+
+    return array;
 }
 
-void quicksort::parallelThresholdQuickSort(
-        vector<int> array,
+std::vector<int> quicksort::sequentialQuickSort(vector<int> &array) {
+    // https://gist.github.com/iwatakeshi/7f7a7c11cd7a6f76598df18a7ecda507
+    // https://github.com/weiaicunzai/CPP_Practice/blob/master/sort/quick_sort.cpp
+    if (array.size() == 1) {
+        return array;
+    }
+
+    return seqQuickSort(array, 0, (int) array.size() - 1);
+}
+
+std::vector<int> quicksort::parallelQuickSort(vector<int> &array, int threadAmount) {
+//    cout << "do sort";
+    return array;
+}
+
+std::vector<int> quicksort::parallelThresholdQuickSort(
+        vector<int> &array,
         int threadAmount,
         int threshold
 ) {
-    cout << "do sort";
+//    cout << "do sort";
+    return array;
 }
