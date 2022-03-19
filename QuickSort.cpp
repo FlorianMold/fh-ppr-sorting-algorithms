@@ -46,9 +46,9 @@ std::vector<int> parQuickSort(vector<int> &array, int low, int high) {
     int pivotIndex = partition(array, low, high, pivotElement);
 
 #pragma omp task default(none) shared(array, low, pivotIndex)
-    seqQuickSort(array, low, pivotIndex - 1);
+    parQuickSort(array, low, pivotIndex - 1);
 #pragma omp task default(none) shared(array, high, pivotIndex)
-    seqQuickSort(array, pivotIndex, high);
+    parQuickSort(array, pivotIndex, high);
 
     return array;
 };
@@ -62,11 +62,32 @@ std::vector<int> quicksort::parallelQuickSort(vector<int> &array) {
     return array;
 }
 
+std::vector<int> parThreshQuickSort(vector<int> &array, int low, int high, int threshold) {
+    if (low >= high) return array;
+
+    int pivotElement = array[(low + high) / 2];
+    int pivotIndex = partition(array, low, high, pivotElement);
+
+    if (high - low > threshold) {
+#pragma omp task default(none) shared(array, low, pivotIndex, threshold)
+        parThreshQuickSort(array, low, pivotIndex - 1, threshold);
+#pragma omp task default(none) shared(array, high, pivotIndex, threshold)
+        parThreshQuickSort(array, pivotIndex, high, threshold);
+    } else {
+        seqQuickSort(array, low, pivotIndex - 1);
+        seqQuickSort(array, pivotIndex, high);
+    }
+    return array;
+};
+
 std::vector<int> quicksort::parallelThresholdQuickSort(
         vector<int> &array,
-        int threadAmount,
         int threshold
 ) {
-//    cout << "do sort";
+#pragma omp parallel default(none) shared(array, threshold)
+    {
+#pragma omp single
+        parThreshQuickSort(array, 0, (int) array.size() - 1, threshold);
+    }
     return array;
 }

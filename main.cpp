@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
             break;
         case 5:
             omp_set_num_threads(threadNum);
-            res = quicksort::parallelThresholdQuickSort(arrayToBeSorted, threadNum, 5);
+            res = quicksort::parallelThresholdQuickSort(arrayToBeSorted, 5000);
             break;
         default:
             cout << "Please provide an execution value between 0 and 5." << endl;

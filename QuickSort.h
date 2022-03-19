@@ -11,7 +11,6 @@ namespace quicksort {
 
     std::vector<int> parallelThresholdQuickSort(
             std::vector<int> &array,
-            int threadAmount,
             int threshold
     );
 }
