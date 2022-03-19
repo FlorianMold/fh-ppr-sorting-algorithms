@@ -12,7 +12,7 @@ do
 done
 
 echo "Running: $iterations iterations of the program";
-echo "Algorithm is run with the following execution-mode: $execution and $randomNumberAmount generated numbers";
+echo "Algorithm is run with the following execution-mode: $execution and generates $randomNumberAmount random numbers for sorting";
 echo "Running: $threads threads";
 echo "Saving to: $filename";
 
