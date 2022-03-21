@@ -74,13 +74,16 @@ function getSubDirectories(directory) {
         .map(dirent => dirent.name)
 }
 
-const resultDirectory = './results';
-const directories = getSubDirectories(resultDirectory);
+const resultDirectory = './results'
+const directories = getSubDirectories(resultDirectory)
 const subSubDirectories = directories
     .map(d => `${resultDirectory}/${d}`)
-    .flatMap(d => getSubDirectories(d).map(s => `${d}/${s}`));
+    .flatMap(d => getSubDirectories(d).map(s => `${d}/${s}`))
 
-subSubDirectories.forEach(dirName => {
+const subSubSubDirectories = subSubDirectories
+    .flatMap(d => getSubDirectories(d).map(s => `${d}/${s}`))
+
+subSubSubDirectories.forEach(dirName => {
     readFiles(dirName)
         .then(files => {
             if (files && files.size <= 0) {
